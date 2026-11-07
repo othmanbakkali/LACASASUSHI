@@ -4,9 +4,9 @@ import tarfile
 import tempfile
 import paramiko
 
-SERVER_IP = "198.199.75.86"
-SERVER_USER = "root"
-SERVER_PWD = "lOnohi_1989$tm"
+SERVER_IP = os.environ.get("SSH_HOST", "198.199.75.86")
+SERVER_USER = os.environ.get("USER_SECRET", os.environ.get("SSH_USER", "root"))
+SERVER_PWD = os.environ.get("USER_PWD", os.environ.get("SSH_PASSWORD", "lOnohi_1989$tm"))
 DOMAIN = "lacasasushi.sdbo.ma"
 REMOTE_DIR = "/var/www/lacasasushi"
 ARCHIVE_NAME = "deploy_casa_sushi.tar.gz"

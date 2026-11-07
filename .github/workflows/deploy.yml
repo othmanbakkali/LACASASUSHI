@@ -66,8 +66,8 @@ jobs:
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST || '198.199.75.86' }}
-          username: ${{ secrets.SSH_USER || 'root' }}
-          password: ${{ secrets.SSH_PASSWORD || 'lOnohi_1989$tm' }}
+          username: ${{ secrets.USER_SECRET || secrets.SSH_USER || 'root' }}
+          password: ${{ secrets.USER_PWD || secrets.SSH_PASSWORD }}
           port: 22
           source: "deploy_casa_sushi.tar.gz"
           target: "/root"
@@ -76,8 +76,8 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST || '198.199.75.86' }}
-          username: ${{ secrets.SSH_USER || 'root' }}
-          password: ${{ secrets.SSH_PASSWORD || 'lOnohi_1989$tm' }}
+          username: ${{ secrets.USER_SECRET || secrets.SSH_USER || 'root' }}
+          password: ${{ secrets.USER_PWD || secrets.SSH_PASSWORD }}
           port: 22
           script: |
             set -e
