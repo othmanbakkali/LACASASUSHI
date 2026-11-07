@@ -2679,6 +2679,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPdfDownloader();
     setupSmoothScroll();
     initCasaSushiMap();
+    initMobileNavigation();
 });
 
 // Chargement des données synchronisées avec l'administration et SQLite
@@ -2852,6 +2853,7 @@ async function initCategoryTabs() {
             navContainer.querySelectorAll('.cat-tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentCategory = btn.dataset.cat;
+            btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
             renderMenuItems();
         });
     });
@@ -2874,6 +2876,7 @@ function initFilterTags() {
             tagsContainer.querySelectorAll('.tag-pill-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             activeFilterTag = btn.dataset.tag;
+            btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
             renderMenuItems();
         });
     });
@@ -3683,5 +3686,54 @@ function setupSmoothScroll() {
                 }
             }
         });
+    });
+}
+
+// 13. Menu Navigation Mobile
+function initMobileNavigation() {
+    const toggleBtn = document.getElementById('mobile-menu-toggle-btn');
+    const closeBtn = document.getElementById('close-mobile-nav-btn');
+    const drawer = document.getElementById('mobile-nav-drawer');
+    const overlay = document.getElementById('mobile-nav-overlay');
+
+    if (!drawer || !overlay) return;
+
+    function openMobileNav() {
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileNav() {
+        drawer.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openMobileNav();
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeMobileNav);
+    }
+
+    overlay.addEventListener('click', closeMobileNav);
+
+    // Fermer le menu lors du clic sur un lien interne
+    drawer.querySelectorAll('.mobile-nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            closeMobileNav();
+        });
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && drawer.classList.contains('open')) {
+            closeMobileNav();
+        }
     });
 }

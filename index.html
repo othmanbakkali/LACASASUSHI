@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>Casa Sushi | Menu Moderne & Commande en Ligne</title>
     <meta name="description" content="Découvrez le menu complet de Casa Sushi : Makis, Californias, Rolls d'Exception, Sashimi, Teppanyaki, Bentos et Grands Plateaux. Commandez en ligne via WhatsApp ou téléchargez la carte en PDF.">
     <meta name="keywords" content="sushi, casa sushi, menu sushi, sashimi, bentos, yakitori, livraison sushi, commande whatsapp">
@@ -71,9 +71,94 @@
                     <i class="fa-solid fa-basket-shopping"></i>
                     <span class="cart-count-badge" style="display: none;">0</span>
                 </button>
+
+                <button class="btn-mobile-menu-toggle" id="mobile-menu-toggle-btn" aria-label="Menu principal" title="Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
             </div>
         </div>
     </header>
+
+    <!-- ==========================================
+         MOBILE NAVIGATION DRAWER
+         ========================================== -->
+    <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+    <aside class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Menu Mobile">
+        <div class="mobile-nav-header">
+            <div class="brand-logo">
+                <div class="brand-symbol">
+                    <i class="fa-solid fa-fish"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Casa Sushi</span>
+                    <span class="brand-tagline">Japanese Fine Food</span>
+                </div>
+            </div>
+            <button class="btn-close-mobile-nav" id="close-mobile-nav-btn" aria-label="Fermer le menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="mobile-nav-body">
+            <nav class="mobile-nav-links">
+                <a href="#menu-explorer" class="mobile-nav-item">
+                    <div class="mobile-nav-icon"><i class="fa-solid fa-book-open"></i></div>
+                    <div class="mobile-nav-text">
+                        <span>Notre Carte</span>
+                        <small>Explorez nos 150+ créations</small>
+                    </div>
+                </a>
+                <a href="#promo-packs-section" class="mobile-nav-item">
+                    <div class="mobile-nav-icon" style="color: var(--crimson-primary);"><i class="fa-solid fa-fire"></i></div>
+                    <div class="mobile-nav-text">
+                        <span>Offres & Packs Promo</span>
+                        <small>Packs avantageux du moment</small>
+                    </div>
+                </a>
+                <a href="menu-pdf.html" target="_blank" class="mobile-nav-item">
+                    <div class="mobile-nav-icon" style="color: #ff6b6b;"><i class="fa-solid fa-file-pdf"></i></div>
+                    <div class="mobile-nav-text">
+                        <span>Format & Livret PDF</span>
+                        <small>Consulter la carte officielle</small>
+                    </div>
+                </a>
+                <a href="#location-map-section" class="mobile-nav-item">
+                    <div class="mobile-nav-icon" style="color: #2ec4b6;"><i class="fa-solid fa-location-dot"></i></div>
+                    <div class="mobile-nav-text">
+                        <span>Restaurant & Livraison</span>
+                        <small>Localisation et estimation GPS</small>
+                    </div>
+                </a>
+                <a href="admin.html" target="_blank" class="mobile-nav-item admin-link">
+                    <div class="mobile-nav-icon" style="color: var(--gold-accent);"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="mobile-nav-text">
+                        <span>Espace Administrateur</span>
+                        <small>Gestion des commandes & menu</small>
+                    </div>
+                </a>
+            </nav>
+
+            <div class="mobile-nav-quick-actions">
+                <a href="tel:+212601860939" class="btn-mobile-call">
+                    <i class="fa-solid fa-phone"></i>
+                    <span>Appeler 06 01 86 09 39</span>
+                </a>
+                <a href="https://wa.me/212601860939?text=Bonjour%20Casa%20Sushi%2C%20je%20souhaite%20commander%20!" target="_blank" class="btn-mobile-wa">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>Commander via WhatsApp</span>
+                </a>
+            </div>
+
+            <div class="mobile-nav-footer">
+                <div class="mobile-social-row">
+                    <a href="https://wa.me/212601860939" target="_blank" class="mobile-social-btn wa" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/casa.sushi_tanger?igsi=MXAwdG1ndmNxbjJ0cw==" target="_blank" class="mobile-social-btn ig" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/lacasasushi1" target="_blank" class="mobile-social-btn fb" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+                <p class="mobile-nav-hours"><i class="fa-regular fa-clock"></i> Ouvert 7j/7 de 12h00 à 00h00</p>
+            </div>
+        </div>
+    </aside>
 
     <!-- ==========================================
          HERO BANNER
@@ -279,7 +364,7 @@
         <button class="btn-close-modal" id="close-pdf-modal-btn" onclick="closePdfModal()" title="Fermer">
             <i class="fa-solid fa-xmark"></i>
         </button>
-        <div class="pdf-modal-content" style="padding: 2.2rem;">
+        <div class="pdf-modal-content">
             <div style="text-align: center; margin-bottom: 1.5rem;">
                 <div style="width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg, #e63946, #b51726); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem; margin-bottom: 0.8rem; box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);">
                     <i class="fa-solid fa-file-pdf"></i>

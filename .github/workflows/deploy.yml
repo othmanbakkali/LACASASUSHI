@@ -1,0 +1,126 @@
+name: CI/CD Pipeline - Déploiement Casa Sushi
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test & Validation Syntaxe
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le code source
+        uses: actions/checkout@v4
+
+      - name: Configuration de Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Installation des dépendances de test
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Vérification de la syntaxe Python
+        run: |
+          python -m py_compile app.py
+          python -m py_compile src/config/*.py
+          python -m py_compile src/controllers/*.py
+          python -m py_compile src/models/*.py
+          python -m py_compile src/routes/*.py
+          echo "✅ Tous les fichiers Python sont valides !"
+
+      - name: Configuration de Node.js pour vérification JS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Vérification de la syntaxe JavaScript
+        run: |
+          node -c app.js
+          node -c admin.js
+          echo "✅ Fichiers JavaScript valides !"
+
+  deploy:
+    name: Déploiement Serveur de Production
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Récupérer le code source
+        uses: actions/checkout@v4
+
+      - name: Préparer l'archive de déploiement
+        run: |
+          tar --exclude='.git' \
+              --exclude='__pycache__' \
+              --exclude='scratch' \
+              --exclude='.github' \
+              -czf deploy_casa_sushi.tar.gz .
+          echo "Archive créée avec succès : $(ls -lh deploy_casa_sushi.tar.gz)"
+
+      - name: Copier l'archive sur le serveur distant
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST || '198.199.75.86' }}
+          username: ${{ secrets.SSH_USER || 'root' }}
+          password: ${{ secrets.SSH_PASSWORD || 'lOnohi_1989$tm' }}
+          port: 22
+          source: "deploy_casa_sushi.tar.gz"
+          target: "/root"
+
+      - name: Exécuter le déploiement et redémarrer les services
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST || '198.199.75.86' }}
+          username: ${{ secrets.SSH_USER || 'root' }}
+          password: ${{ secrets.SSH_PASSWORD || 'lOnohi_1989$tm' }}
+          port: 22
+          script: |
+            set -e
+            echo "=== 1. Décompression de la nouvelle version ==="
+            mkdir -p /var/www/lacasasushi
+            
+            # Sauvegarder la base de données de production active pour ne pas écraser les données
+            if [ -f "/var/www/lacasasushi/casa_sushi.db" ]; then
+              cp /var/www/lacasasushi/casa_sushi.db /var/www/lacasasushi/casa_sushi.db.bak
+            fi
+            
+            tar -xzf /root/deploy_casa_sushi.tar.gz -C /var/www/lacasasushi/
+            
+            # Restaurer la base si sauvegarde existante
+            if [ -f "/var/www/lacasasushi/casa_sushi.db.bak" ]; then
+              mv /var/www/lacasasushi/casa_sushi.db.bak /var/www/lacasasushi/casa_sushi.db
+            fi
+
+            echo "=== 2. Installation des dépendances venv ==="
+            if [ ! -d "/var/www/lacasasushi/venv" ]; then
+              python3 -m venv /var/www/lacasasushi/venv
+            fi
+            /var/www/lacasasushi/venv/bin/pip install --upgrade pip
+            /var/www/lacasasushi/venv/bin/pip install -r /var/www/lacasasushi/requirements.txt
+
+            echo "=== 3. Application des permissions www-data ==="
+            chown -R www-data:www-data /var/www/lacasasushi
+            chmod -R 775 /var/www/lacasasushi
+            if [ -f "/var/www/lacasasushi/casa_sushi.db" ]; then
+              chmod 664 /var/www/lacasasushi/casa_sushi.db
+            fi
+
+            echo "=== 4. Redémarrage du service systemd ==="
+            systemctl daemon-reload
+            systemctl restart lacasasushi.service
+            systemctl reload nginx
+
+            echo "=== 5. Vérification du statut applicatif ==="
+            systemctl is-active lacasasushi.service
+            curl -I http://127.0.0.1:5055/ || true
+
+      - name: Vérification finale de l'URL publique
+        run: |
+          echo "Vérification de https://lacasasushi.sdbo.ma/ ..."
+          curl -ILs https://lacasasushi.sdbo.ma/ | head -n 10 || true
+

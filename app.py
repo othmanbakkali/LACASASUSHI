@@ -29,12 +29,15 @@ class CasaSushiHandler(http.server.BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
 
-    def _send_json_response(self, data, status_code=200):
+    def _send_json_response(self, data, status_code=200, method='GET'):
         self.send_response(status_code)
         self.send_header('Content-Type', 'application/json; charset=utf-8')
+        encoded = json.dumps(data, ensure_ascii=False).encode('utf-8')
+        self.send_header('Content-Length', str(len(encoded)))
         self._add_security_headers()
         self.end_headers()
-        self.wfile.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
+        if method != 'HEAD':
+            self.wfile.write(encoded)
 
     def _send_binary_pdf(self, pdf_bytes, filename="Casa_Sushi_Menu_Tanger.pdf", status_code=200):
         self.send_response(status_code)
@@ -66,6 +69,9 @@ class CasaSushiHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         self._route_request('GET')
 
+    def do_HEAD(self):
+        self._route_request('HEAD')
+
     def do_POST(self):
         self._route_request('POST')
 
@@ -86,20 +92,21 @@ class CasaSushiHandler(http.server.BaseHTTPRequestHandler):
         # 1. Requête API REST (Prise en charge sécurisée par le Routeur MVC)
         if pathname.startswith('/api/'):
             body = self._parse_json_body() if method in ('POST', 'PUT', 'PATCH') else None
-            result = ApiRouter.handle_request(method, self.path, body, dict(self.headers), client_ip=client_ip)
+            api_method = 'GET' if method == 'HEAD' else method
+            result = ApiRouter.handle_request(api_method, self.path, body, dict(self.headers), client_ip=client_ip)
             if result:
                 data, status_code = result
                 # Réponse binaire PDF directe
                 if isinstance(data, dict) and '_raw_pdf' in data:
                     self._send_binary_pdf(data['_raw_pdf'], data.get('_filename', 'Casa_Sushi_Menu_Tanger.pdf'), status_code)
                 else:
-                    self._send_json_response(data, status_code)
+                    self._send_json_response(data, status_code, method=method)
             else:
-                self._send_json_response({'error': 'Point de terminaison introuvable ou méthode non supportée'}, 404)
+                self._send_json_response({'error': 'Point de terminaison introuvable ou méthode non supportée'}, 404, method=method)
             return
 
         # 2. Fichiers Statiques Frontend (Vues & Assets avec protection Path Traversal)
-        if method != 'GET':
+        if method not in ('GET', 'HEAD'):
             self.send_error(405, "Méthode non autorisée")
             return
 
@@ -132,7 +139,8 @@ class CasaSushiHandler(http.server.BaseHTTPRequestHandler):
             self.send_header('Content-Length', str(len(content)))
             self._add_security_headers()
             self.end_headers()
-            self.wfile.write(content)
+            if method != 'HEAD':
+                self.wfile.write(content)
         except Exception as e:
             self.send_error(500, f"Erreur de lecture: {str(e)}")
 

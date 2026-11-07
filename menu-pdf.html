@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>Casa Sushi Tanger | Catalogue & Menu Gastronomique</title>
     <meta name="description" content="Catalogue complet et illustré de Casa Sushi Tanger : Makis, Rolls d'Exception, Sashimi, Bentos, Plats Chauds et Plateaux Prestige.">
     
@@ -403,6 +403,86 @@
             font-weight: 700;
             font-size: 0.9rem;
             text-decoration: none;
+        }
+
+        /* Mobile Responsive for On-Screen Viewing */
+        @media screen and (max-width: 768px) {
+            .pdf-top-bar {
+                padding: 0.6rem 0.8rem;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.6rem;
+            }
+
+            .pdf-top-bar-title {
+                font-size: 0.95rem;
+                justify-content: center;
+            }
+
+            .pdf-top-actions {
+                justify-content: center;
+                gap: 0.4rem;
+                width: 100%;
+            }
+
+            .btn-top {
+                padding: 0.45rem 0.7rem;
+                font-size: 0.76rem;
+                flex: 1;
+                justify-content: center;
+            }
+
+            .pdf-guide-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.6rem;
+                margin: 0.8rem 1rem 0;
+                padding: 0.8rem;
+                font-size: 0.82rem;
+            }
+
+            #menu-pdf-document {
+                margin: 1rem auto;
+                padding: 0 0.8rem;
+            }
+
+            .dishes-catalogue-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .dish-image-wrapper {
+                height: 180px;
+            }
+
+            .catalogue-cover {
+                padding: 2rem 1rem;
+                margin-bottom: 1.8rem;
+            }
+
+            .cover-title {
+                font-size: 1.8rem;
+            }
+
+            .floating-wa-btn {
+                left: 16px;
+                bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+                width: 50px;
+                height: 50px;
+                padding: 0;
+                border-radius: 50%;
+                justify-content: center;
+                box-shadow: 0 6px 20px rgba(37, 211, 102, 0.55);
+            }
+
+            .floating-wa-btn span {
+                display: none;
+            }
+
+            .floating-wa-btn i {
+                font-size: 1.6rem;
+                margin: 0;
+            }
         }
 
         /* IMPRESSION & ENREGISTREMENT PDF VECTORIEL SANS PAGE BLANCHE */

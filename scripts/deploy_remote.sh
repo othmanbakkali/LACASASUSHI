@@ -46,7 +46,7 @@ upstream lacasasushi_backend {
 }
 
 server {
-    server_name lacasasushi.sdbo.ma www.lacasasushi.sdbo.ma;
+    server_name lacasasushi.sdbo.ma;
     client_max_body_size 50M;
 
     location /uploads/ {
@@ -71,8 +71,12 @@ server {
 EOF
 
 ln -sf /etc/nginx/sites-available/lacasasushi.sdbo.ma /etc/nginx/sites-enabled/
+rm -f /etc/nginx/sites-enabled/default
 nginx -t
 systemctl reload nginx
+
+echo "=== 6. SSL Certbot ==="
+certbot --nginx -d lacasasushi.sdbo.ma --non-interactive --agree-tos -m contact@lacasasushi.sdbo.ma --redirect || true
 
 echo "=== 6. Statut du service ==="
 systemctl is-active lacasasushi.service
