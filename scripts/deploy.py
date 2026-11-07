@@ -185,8 +185,18 @@ upstream lacasasushi_backend {{
 }}
 
 server {{
+    listen 80;
+    server_name {DOMAIN};
+    return 301 https://$host$request_uri;
+}}
+
+server {{
+    listen 443 ssl;
     server_name {DOMAIN};
     client_max_body_size 50M;
+
+    ssl_certificate /etc/letsencrypt/live/{DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{DOMAIN}/privkey.pem;
 
     location /uploads/ {{
         alias {REMOTE_DIR}/uploads/;
@@ -202,24 +212,17 @@ server {{
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Proto https;
     }}
-
-    listen 80;
 }}
 NGINX_EOF
 
 ln -sf /etc/nginx/sites-available/{DOMAIN} /etc/nginx/sites-enabled/
-# Désactiver le site default s'il est actif sur le port 80 pour éviter tout conflit
 rm -f /etc/nginx/sites-enabled/default
 nginx -t
 systemctl reload nginx
 
-echo "=== 6. Configuration SSL Certbot (HTTPS) ==="
-# Tenter d'obtenir/renouveler le certificat SSL si le domaine pointe vers ce serveur
-certbot --nginx -d {DOMAIN} --non-interactive --agree-tos -m contact@{DOMAIN} --redirect || echo "Certbot n'a pas pu émettre immédiatement le certificat (DNS peut-être en cours de propagation)."
-
-echo "=== 7. Statut final du service ==="
+echo "=== 6. Statut final du service ==="
 systemctl is-active lacasasushi.service
 curl -I http://127.0.0.1:5055/ || true
 """
