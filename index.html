@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa Sushi | Menu Moderne & Commande en Ligne</title>
+    <meta name="description" content="Découvrez le menu complet de Casa Sushi : Makis, Californias, Rolls d'Exception, Sashimi, Teppanyaki, Bentos et Grands Plateaux. Commandez en ligne via WhatsApp ou téléchargez la carte en PDF.">
+    <meta name="keywords" content="sushi, casa sushi, menu sushi, sashimi, bentos, yakitori, livraison sushi, commande whatsapp">
+    <meta name="theme-color" content="#0c0d12">
+    
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="Casa Sushi - Menu Gastronomique Japonais">
+    <meta property="og:description" content="Consultez notre carte interactive des 16 pages de délices japonais et commandez instantanément.">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet.js Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- html2pdf.js pour génération directe du catalogue PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ==========================================
+         NAVIGATION HEADER
+         ========================================== -->
+    <header class="main-header" id="header">
+        <div class="nav-container">
+            <a href="#header" class="brand-logo">
+                <div class="brand-symbol">
+                    <i class="fa-solid fa-fish"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Casa Sushi</span>
+                    <span class="brand-tagline">Japanese Fine Food</span>
+                </div>
+            </a>
+
+            <nav class="nav-links-desktop">
+                <a href="#menu-explorer" class="nav-link"><i class="fa-solid fa-book-open"></i> Notre Carte</a>
+                <a href="menu-pdf.html" target="_blank" class="nav-link"><i class="fa-solid fa-file-pdf"></i> Format PDF</a>
+                <a href="admin.html" target="_blank" class="nav-link" style="color: var(--gold-accent);"><i class="fa-solid fa-shield-halved"></i> Espace Admin</a>
+                <a href="#contact-info" class="nav-link"><i class="fa-solid fa-location-dot"></i> Restaurant</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="https://www.facebook.com/lacasasushi1" target="_blank" class="btn-facebook-header" title="Page Facebook : @lacasasushi1">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+
+                <a href="https://www.instagram.com/casa.sushi_tanger?igsi=MXAwdG1ndmNxbjJ0cw==" target="_blank" class="btn-instagram-header" title="Suivez-nous sur Instagram @casa.sushi_tanger">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+
+                <a href="/api/menu/pdf" download="Casa_Sushi_Menu_Tanger.pdf" class="btn-pdf-header" title="Télécharger le Catalogue PDF Officiel">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Télécharger Menu PDF</span>
+                </a>
+
+                <button class="btn-cart-header open-cart-btn" title="Voir mon panier">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                    <span class="cart-count-badge" style="display: none;">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         HERO BANNER
+         ========================================== -->
+    <section class="hero-section">
+        <div class="hero-banner">
+            <div class="hero-content">
+                <div class="hero-eyebrow">
+                    <i class="fa-solid fa-award"></i> Haute Gastronomie Japonaise
+                </div>
+                <h1 class="hero-title">L'Art & la Fraîcheur du <span>Sushi d'Exception</span></h1>
+                <p class="hero-desc">
+                    Explorez nos 15 pages de créations culinaires : Makis raffinés, Casa Rolls croustillants, 
+                    Teppanyaki fumants, Bentos complets et prestigieux plateaux de fête.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="#menu-explorer" class="btn-primary-hero">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span>Explorer la Carte</span>
+                    </a>
+                    <a href="/api/menu/pdf" download="Casa_Sushi_Menu_Tanger.pdf" class="btn-secondary-hero">
+                        <i class="fa-solid fa-file-arrow-down"></i>
+                        <span>Télécharger le Catalogue PDF</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-highlights">
+                <div class="highlight-box">
+                    <i class="fa-solid fa-truck-fast"></i>
+                    <div class="highlight-text">
+                        <h4>Livraison Express</h4>
+                        <p>Commandez en direct via WhatsApp</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <i class="fa-solid fa-certificate"></i>
+                    <div class="highlight-text">
+                        <h4>Poissons Extra-Frais</h4>
+                        <p>Préparation minute par nos chefs</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <i class="fa-solid fa-fire"></i>
+                    <div class="highlight-text">
+                        <h4>Plats Chauds & Woks</h4>
+                        <p>Teppanyaki, Nouilles & Pad Thaï</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <i class="fa-solid fa-champagne-glasses"></i>
+                    <div class="highlight-text">
+                        <h4>Grands Plateaux</h4>
+                        <p>Jusqu'à 90 pièces prestige</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         OFFRES & PACKS PROMOTIONNELS PÉRIODIQUES (DYNAMIQUE)
+         ========================================== -->
+    <section class="promo-section-wrapper" id="promo-packs-section">
+        <!-- Rempli dynamiquement par app.js depuis l'administration -->
+    </section>
+
+    <!-- ==========================================
+         SEARCH & CATEGORIES BAR (STICKY)
+         ========================================== -->
+    <section class="controls-section" id="menu-explorer">
+        <div class="controls-container">
+            <!-- Search Row -->
+            <div class="search-row">
+                <div class="search-box-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher un sushi, un plat, saumon, avocat, bento, teppanyaki...">
+                    <button class="clear-search-btn" id="clear-search-btn" title="Effacer"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="results-counter" id="results-count">
+                    Chargement des plats...
+                </div>
+            </div>
+
+            <!-- Categories Tabs -->
+            <nav class="category-nav-bar" aria-label="Catégories du menu">
+                <div class="category-nav-list" id="category-nav-list">
+                    <!-- Généré dynamiquement en JS -->
+                </div>
+            </nav>
+
+            <!-- Quick Dietary Tags -->
+            <div class="quick-tags-bar">
+                <div class="quick-tags-list" id="quick-tags-list">
+                    <!-- Généré dynamiquement en JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         MENU ITEMS GRID
+         ========================================== -->
+    <main class="menu-main-section">
+        <div class="menu-items-grid" id="menu-items-grid">
+            <!-- Rempli dynamiquement par app.js -->
+        </div>
+    </main>
+
+    <!-- ==========================================
+         FLOATING BUTTONS (WHATSAPP & CART)
+         ========================================== -->
+    <a href="https://wa.me/212601860939?text=Bonjour%20Casa%20Sushi%2C%20je%20souhaite%20commander%20!" target="_blank" class="floating-whatsapp-btn" aria-label="Commander sur WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span>WhatsApp : 06 01 86 09 39</span>
+    </a>
+
+    <button class="floating-cart-btn open-cart-btn" aria-label="Ouvrir le panier">
+        <i class="fa-solid fa-basket-shopping"></i>
+        <span>Mon Panier</span>
+        <span class="cart-count-badge" style="display: none;">0</span>
+    </button>
+
+    <!-- ==========================================
+         CART DRAWER (SIDEBAR)
+         ========================================== -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <aside class="cart-drawer" id="cart-drawer">
+        <div class="cart-drawer-header">
+            <h3><i class="fa-solid fa-bag-shopping"></i> Votre Commande</h3>
+            <div class="cart-header-actions">
+                <button class="btn-clear-cart" onclick="clearCart()" title="Vider le panier">
+                    <i class="fa-solid fa-trash-can"></i> Vider
+                </button>
+                <button class="btn-close-drawer" id="close-cart-btn" title="Fermer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="cart-drawer-body" id="cart-items-list">
+            <!-- Rempli dynamiquement -->
+        </div>
+
+        <div class="cart-drawer-footer" id="cart-drawer-footer">
+            <div class="cart-summary-box">
+                <span>Total de la commande :</span>
+                <h3 id="cart-total-price">0 DH</h3>
+            </div>
+
+            <!-- Formulaire de Commande Directe WhatsApp -->
+            <form class="whatsapp-form" id="whatsapp-order-form">
+                <div class="form-group-radio">
+                    <label class="radio-pill">
+                        <input type="radio" name="order-type" value="Livraison à Domicile" checked>
+                        <span><i class="fa-solid fa-motorcycle"></i> Livraison</span>
+                    </label>
+                    <label class="radio-pill">
+                        <input type="radio" name="order-type" value="À Emporter (Take Away)">
+                        <span><i class="fa-solid fa-bag-shopping"></i> À Emporter</span>
+                    </label>
+                </div>
+
+                <input type="text" id="client-name" class="cart-input" placeholder="Votre Nom et Prénom *" required>
+                <input type="tel" id="client-phone" class="cart-input" placeholder="Numéro de téléphone *" required>
+                
+                <div style="position: relative; margin-bottom: 0.8rem;">
+                    <input type="text" id="client-address" class="cart-input" placeholder="Adresse complète de livraison *" required style="padding-right: 2.8rem; margin-bottom: 0;">
+                    <button type="button" class="btn-gps-detect-input" id="btn-autofill-gps" onclick="detectUserLocationForCart()" title="Détecter ma position GPS actuelle" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: #2ec4b6; color: #fff; border: none; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                    </button>
+                </div>
+                <div id="gps-status-indicator" style="font-size: 0.78rem; color: #2ec4b6; margin-bottom: 0.8rem; display: none;"></div>
+
+                <textarea id="order-notes" class="cart-input" rows="2" placeholder="Instructions spéciales, sauce soja sucrée/salée, sans wasabi..."></textarea>
+
+                <button type="submit" class="btn-submit-whatsapp">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>Commander via WhatsApp</span>
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- ==========================================
+         DISH DETAIL MODAL
+         ========================================== -->
+    <div class="dish-modal-overlay" id="dish-modal-overlay"></div>
+    <div class="dish-modal" id="dish-modal">
+        <button class="btn-close-modal" id="close-dish-modal-btn" title="Fermer">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div id="dish-modal-body">
+            <!-- Rempli au clic sur un plat -->
+        </div>
+    </div>
+
+    <!-- ==========================================
+         PDF GENERATION MODAL
+         ========================================== -->
+    <div class="dish-modal-overlay" id="pdf-modal-overlay"></div>
+    <div class="dish-modal" id="pdf-generator-modal" style="max-width: 580px;">
+        <button class="btn-close-modal" id="close-pdf-modal-btn" onclick="closePdfModal()" title="Fermer">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="pdf-modal-content" style="padding: 2.2rem;">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div style="width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg, #e63946, #b51726); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem; margin-bottom: 0.8rem; box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </div>
+                <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 0.3rem;">Générateur de Catalogue PDF</h2>
+                <p style="color: var(--text-secondary); font-size: 0.88rem;">Exportez l'intégralité du menu Casa Sushi (16 pages) en format PDF haute définition.</p>
+            </div>
+
+            <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1.5rem;">
+                <h4 style="font-size: 0.9rem; margin-bottom: 0.8rem; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-sliders" style="color: var(--gold-accent);"></i> Style & Format du Document
+                </h4>
+                
+                <div style="display: flex; gap: 0.8rem; margin-bottom: 1rem;">
+                    <label class="radio-pill" style="flex: 1;">
+                        <input type="radio" name="pdf-theme-opt" value="dark" checked>
+                        <span><i class="fa-solid fa-moon"></i> Sombre Luxe</span>
+                    </label>
+                    <label class="radio-pill" style="flex: 1;">
+                        <input type="radio" name="pdf-theme-opt" value="light">
+                        <span><i class="fa-solid fa-sun"></i> Blanc Éco (Impression)</span>
+                    </label>
+                </div>
+
+                <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem;">
+                    <i class="fa-solid fa-circle-info" style="color: var(--gold-accent);"></i>
+                    <span>Comprend 150+ créations, ingrédients, prix en DH et photos officielles.</span>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                <a href="/api/menu/pdf" download="Casa_Sushi_Menu_Tanger.pdf" class="btn-submit-whatsapp" id="btn-start-pdf-generation" style="background: linear-gradient(135deg, #e63946, #b51726); box-shadow: 0 4px 18px rgba(230, 57, 70, 0.4); text-decoration: none; justify-content: center;">
+                    <i class="fa-solid fa-file-arrow-down"></i>
+                    <span>Télécharger le Fichier PDF Direct</span>
+                </a>
+
+                <a href="menu-pdf.html" target="_blank" class="btn-secondary-hero" style="justify-content: center; font-size: 0.9rem; padding: 0.75rem; text-decoration: none;">
+                    <i class="fa-solid fa-up-right-from-square"></i>
+                    <span>Ouvrir la Vue d'Impression & Livret A4</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         CARTE INTERACTIVE & GÉOLOCALISATION EN TEMPS RÉEL
+         ========================================== -->
+    <section class="restaurant-map-section" id="location-map-section">
+        <div class="map-section-header">
+            <div class="promo-header-badge"><i class="fa-solid fa-location-dot"></i> Restaurant & Livraison</div>
+            <h2 class="promo-section-title">Notre Emplacement & Carte Interactive</h2>
+            <p class="promo-section-subtitle">Localisez Casa Sushi Tanger ou activez la géolocalisation en temps réel pour estimer votre temps de livraison.</p>
+        </div>
+
+        <div class="map-interactive-container">
+            <div class="map-toolbar">
+                <button class="btn-live-gps" id="btn-detect-realtime-gps" onclick="detectRealtimeMapLocation()">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                    <span>Détecter ma position en temps réel</span>
+                </button>
+                <div class="map-distance-info" id="map-live-distance-box" style="display: none;">
+                    <i class="fa-solid fa-motorcycle" style="color: var(--crimson-primary);"></i>
+                    <span id="map-distance-text">Distance : Calcul en cours...</span>
+                </div>
+            </div>
+
+            <div id="casa-sushi-map" class="casa-sushi-map-frame"></div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer class="main-footer" id="contact-info">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="brand-logo">
+                    <div class="brand-symbol">
+                        <i class="fa-solid fa-fish"></i>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">Casa Sushi</span>
+                        <span class="brand-tagline">Japanese Fine Food</span>
+                    </div>
+                </div>
+                <p>
+                    Spécialités de sushi, maki, sashimi, plats chauds teppanyaki et bentos. 
+                    Une expérience gustative inoubliable à déguster sur place ou en livraison.
+                </p>
+                <div class="footer-socials">
+                    <a href="https://wa.me/212601860939" target="_blank" class="footer-social-link" title="WhatsApp : 06 01 86 09 39" style="background: #25d366; border-color: #25d366; color: #fff;"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/casa.sushi_tanger?igsi=MXAwdG1ndmNxbjJ0cw==" target="_blank" class="footer-social-link instagram-link" title="Instagram @casa.sushi_tanger"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/lacasasushi1" target="_blank" class="footer-social-link facebook-link" title="Facebook : @lacasasushi1"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Nos Spécialités</h4>
+                <ul>
+                    <li><a href="#menu-explorer" onclick="document.querySelector('[data-cat=casa_rolls]').click()">Casa Rolls</a></li>
+                    <li><a href="#menu-explorer" onclick="document.querySelector('[data-cat=makis_california]').click()">California & Makis</a></li>
+                    <li><a href="#menu-explorer" onclick="document.querySelector('[data-cat=frits_pizza]').click()">Sushi Frits & Pizzas</a></li>
+                    <li><a href="#menu-explorer" onclick="document.querySelector('[data-cat=plats_chauds]').click()">Teppanyaki & Woks</a></li>
+                    <li><a href="#menu-explorer" onclick="document.querySelector('[data-cat=assortiments]').click()">Plateaux Prestige</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Informations</h4>
+                <ul>
+                    <li><a href="menu-pdf.html" target="_blank"><i class="fa-solid fa-file-pdf"></i> Télécharger le Menu PDF</a></li>
+                    <li><a href="admin.html" target="_blank"><i class="fa-solid fa-lock"></i> Administration du Restaurant</a></li>
+                    <li><a href="#header">Horaires : 12h00 - 00h00</a></li>
+                    <li><a href="#header">Service 7j / 7</a></li>
+                    <li><a href="#header">Produits 100% Halal</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact & Commande</h4>
+                <ul>
+                    <li><i class="fa-solid fa-location-dot"></i> Casablanca, Maroc</li>
+                    <li><a href="https://wa.me/212601860939" target="_blank" style="color: #25d366; font-weight: 700;"><i class="fa-brands fa-whatsapp"></i> 06 01 86 09 39</a></li>
+                    <li><a href="tel:+212601860939"><i class="fa-solid fa-phone"></i> +212 601 860 939</a></li>
+                    <li><i class="fa-solid fa-motorcycle"></i> Livraison Rapide 7j/7</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Casa Sushi. Tous droits réservés.</p>
+            <p>Conçu pour une expérience gastronomique haut de gamme.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>

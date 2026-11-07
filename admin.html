@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration | Casa Sushi - Gestion des Produits & Packs Promo</title>
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* Admin Specific Styling */
+        .admin-auth-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            background: radial-gradient(circle at center, #191c26 0%, #0c0d12 100%);
+        }
+
+        .auth-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-accent);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(230, 57, 70, 0.2);
+        }
+
+        .auth-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--crimson-primary), var(--crimson-dark));
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 4px 15px var(--crimson-glow);
+        }
+
+        .auth-card h2 {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .auth-card p {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .auth-input-group {
+            position: relative;
+            margin-bottom: 1.2rem;
+        }
+
+        .auth-input-group i {
+            position: absolute;
+            left: 1.1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .auth-input {
+            width: 100%;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            color: #fff;
+            padding: 0.8rem 1rem 0.8rem 2.8rem;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition-fast);
+        }
+
+        .auth-input:focus {
+            border-color: var(--crimson-primary);
+            box-shadow: 0 0 0 3px var(--crimson-glow);
+        }
+
+        .btn-auth-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--crimson-primary), var(--crimson-dark));
+            color: #fff;
+            padding: 0.85rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px var(--crimson-glow);
+            transition: var(--transition-fast);
+        }
+
+        .btn-auth-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.6);
+        }
+
+        /* Admin Dashboard Layout */
+        .admin-layout {
+            display: none;
+            min-height: 100vh;
+            background: #090a0f;
+        }
+
+        .admin-sidebar {
+            width: 260px;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .admin-sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .admin-nav-menu {
+            padding: 1.2rem 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            flex: 1;
+        }
+
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.92rem;
+            transition: var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .admin-nav-item i {
+            font-size: 1.1rem;
+            width: 22px;
+        }
+
+        .admin-nav-item:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .admin-nav-item.active {
+            background: linear-gradient(135deg, var(--crimson-primary), var(--crimson-dark));
+            color: #fff;
+            box-shadow: 0 4px 15px var(--crimson-glow);
+        }
+
+        .admin-sidebar-footer {
+            padding: 1.2rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .admin-main-content {
+            margin-left: 260px;
+            padding: 2rem 2.5rem;
+            flex: 1;
+        }
+
+        /* Top bar */
+        .admin-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .admin-page-title h1 {
+            font-family: var(--font-heading);
+            font-size: 1.7rem;
+            color: #fff;
+        }
+
+        .admin-page-title p {
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+        }
+
+        /* Stats Grid */
+        .admin-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.3rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-info h3 {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 0.2rem;
+        }
+
+        .stat-info p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .stat-icon.red { background: rgba(230, 57, 70, 0.15); color: var(--crimson-primary); }
+        .stat-icon.gold { background: rgba(244, 162, 97, 0.15); color: var(--gold-accent); }
+        .stat-icon.green { background: rgba(46, 196, 182, 0.15); color: #2ec4b6; }
+        .stat-icon.purple { background: rgba(157, 78, 221, 0.15); color: #9d4edd; }
+
+        /* Tables & Lists */
+        .admin-card-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .admin-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-card-header h2 {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: #fff;
+        }
+
+        .admin-filter-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .admin-search-input {
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            color: #fff;
+            padding: 0.55rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.88rem;
+            outline: none;
+            min-width: 220px;
+        }
+
+        .admin-select {
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            color: #fff;
+            padding: 0.55rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.88rem;
+            outline: none;
+        }
+
+        .btn-admin-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--crimson-primary), var(--crimson-dark));
+            color: #fff;
+            padding: 0.65rem 1.2rem;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-size: 0.88rem;
+            box-shadow: 0 4px 15px var(--crimson-glow);
+            transition: var(--transition-fast);
+        }
+
+        .btn-admin-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.5);
+        }
+
+        /* Products Table */
+        .admin-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.88rem;
+        }
+
+        .admin-table th {
+            background: var(--bg-surface-elevated);
+            color: var(--text-secondary);
+            padding: 0.9rem 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.75rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .admin-table td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+            vertical-align: middle;
+        }
+
+        .admin-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .product-thumb-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .product-thumb-img {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #11131a;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .product-name-info h4 {
+            color: #fff;
+            font-size: 0.92rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .product-name-info span {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .action-btns-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-table-action {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
+            transition: var(--transition-fast);
+        }
+
+        .btn-table-action:hover {
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-table-action.edit:hover {
+            background: var(--gold-accent);
+            color: #111;
+            border-color: var(--gold-accent);
+        }
+
+        .btn-table-action.delete:hover {
+            background: var(--crimson-primary);
+            color: #fff;
+            border-color: var(--crimson-primary);
+        }
+
+        /* Stock Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 22px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background-color: #333948;
+            transition: .3s;
+            border-radius: 22px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: #2ec4b6; }
+        input:checked + .slider:before { transform: translateX(18px); }
+
+        /* Promo Packs Grid */
+        .promo-packs-admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .promo-pack-card {
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-gold);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .promo-pack-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, var(--crimson-primary), var(--crimson-dark));
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 0.25rem 0.65rem;
+            border-radius: var(--radius-full);
+            box-shadow: 0 2px 8px var(--crimson-glow);
+            z-index: 2;
+        }
+
+        .promo-pack-img {
+            height: 160px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .promo-pack-content {
+            padding: 1.2rem;
+        }
+
+        .promo-pack-dates {
+            font-size: 0.78rem;
+            color: var(--gold-accent);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .promo-pack-title {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 0.4rem;
+        }
+
+        .promo-pack-desc {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .promo-pack-pricing {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .promo-old-price {
+            text-decoration: line-through;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .promo-new-price {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--gold-accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .admin-sidebar {
+                width: 70px;
+            }
+            .admin-sidebar .admin-sidebar-header span,
+            .admin-sidebar .admin-nav-item span,
+            .admin-sidebar .admin-sidebar-footer span {
+                display: none;
+            }
+            .admin-sidebar-header { justify-content: center; padding: 1.2rem 0; }
+            .admin-nav-item { justify-content: center; padding: 0.8rem; }
+            .admin-main-content { margin-left: 70px; padding: 1.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================
+         ÉCRAN DE CONNEXION ADMIN (LOGIN & PASSWORD)
+         ========================================== -->
+    <div class="admin-auth-wrapper" id="admin-auth-screen">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h2>Espace Administrateur</h2>
+            <p>Connectez-vous à votre espace de gestion <strong>Casa Sushi</strong> selon vos droits.</p>
+            
+            <form id="admin-login-form">
+                <div class="auth-input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="admin-username-input" class="auth-input" placeholder="Identifiant / Nom d'utilisateur" required autofocus>
+                </div>
+                <div class="auth-input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="admin-password-input" class="auth-input" placeholder="Mot de passe" required>
+                </div>
+                <button type="submit" class="btn-auth-submit">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    <span>Se Connecter</span>
+                </button>
+            </form>
+            
+            <div style="margin-top: 1.2rem; padding: 0.8rem; background: rgba(255,255,255,0.04); border-radius: 8px; border: 1px solid var(--border-subtle); text-align: left; font-size: 0.76rem; color: var(--text-secondary);">
+                <div style="font-weight: 700; color: var(--gold-accent); margin-bottom: 0.3rem;"><i class="fa-solid fa-circle-info"></i> Comptes & Rôles disponibles :</div>
+                <div>👑 <strong>admin</strong> / <code>admin123</code> (Super Administrateur)</div>
+                <div>👔 <strong>gerant</strong> / <code>gerant123</code> (Gérant du restaurant)</div>
+                <div>👨‍🍳 <strong>cuisine</strong> / <code>cuisine123</code> (Commandes & Cuisine)</div>
+            </div>
+
+            <div style="margin-top: 1.2rem;">
+                <a href="index.html" style="color: var(--text-muted); font-size: 0.82rem; text-decoration: none;">
+                    <i class="fa-solid fa-arrow-left"></i> Retour au site client
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         INTERFACE DU DASHBOARD ADMIN
+         ========================================== -->
+    <div class="admin-layout" id="admin-dashboard-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <div class="brand-symbol" style="width: 38px; height: 38px; font-size: 1.1rem;">
+                    <i class="fa-solid fa-fish"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name" style="font-size: 1.1rem;">Casa Sushi</span>
+                    <span class="brand-tagline" style="font-size: 0.65rem;">Panel Admin</span>
+                </div>
+            </div>
+
+            <!-- Badge Utilisateur Connecté -->
+            <div id="admin-user-badge-container" style="margin: 0 1rem 1rem; padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 0.8rem;">
+                <div style="width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--crimson-primary), var(--gold-accent)); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; color: #fff;" id="admin-avatar-letter">A</div>
+                <div style="overflow: hidden; flex: 1;">
+                    <div id="admin-current-user-name" style="font-size: 0.85rem; font-weight: 700; color: #fff; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">Administrateur</div>
+                    <div id="admin-current-user-role" style="font-size: 0.7rem; color: var(--gold-accent); text-transform: uppercase; font-weight: 700;">Super Admin</div>
+                </div>
+            </div>
+
+            <nav class="admin-nav-menu">
+                <div class="admin-nav-item active" data-tab="orders-tab" data-roles="admin,manager,cuisinier">
+                    <i class="fa-solid fa-bell-concierge"></i>
+                    <span>Commandes Clients</span>
+                    <span id="nav-orders-count-badge" class="badge-signature" style="margin-left: auto; font-size: 0.72rem; padding: 0.15rem 0.5rem; display: none;">0</span>
+                </div>
+                <div class="admin-nav-item" data-tab="dashboard-tab" data-roles="admin,manager">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Tableau de Bord</span>
+                </div>
+                <div class="admin-nav-item" data-tab="categories-tab" data-roles="admin,manager">
+                    <i class="fa-solid fa-folder-tree"></i>
+                    <span>Gestion des Catégories</span>
+                </div>
+                <div class="admin-nav-item" data-tab="products-tab" data-roles="admin,manager">
+                    <i class="fa-solid fa-utensils"></i>
+                    <span>Gestion des Plats</span>
+                </div>
+                <div class="admin-nav-item" data-tab="promos-tab" data-roles="admin,manager">
+                    <i class="fa-solid fa-fire"></i>
+                    <span>Packs Promo Périodiques</span>
+                </div>
+                <div class="admin-nav-item" data-tab="users-tab" data-roles="admin">
+                    <i class="fa-solid fa-users-gear"></i>
+                    <span>Gestion Utilisateurs & Droits</span>
+                </div>
+                <div class="admin-nav-item" data-tab="settings-tab" data-roles="admin">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Paramètres & BDD SQLite</span>
+                </div>
+            </nav>
+
+            <div class="admin-sidebar-footer">
+                <a href="index.html" target="_blank" class="admin-nav-item" style="color: var(--gold-accent);">
+                    <i class="fa-solid fa-up-right-from-square"></i>
+                    <span>Voir le Site Client</span>
+                </a>
+                <div class="admin-nav-item" onclick="logoutAdmin()" style="color: #ff6b6b; margin-top: 0.3rem;">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Déconnexion</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Panel -->
+        <main class="admin-main-content">
+            
+            <!-- Topbar -->
+            <div class="admin-topbar">
+                <div class="admin-page-title">
+                    <h1 id="admin-current-section-title">Tableau de Bord</h1>
+                    <p id="admin-current-section-subtitle">Aperçu global et gestion de la carte Casa Sushi</p>
+                </div>
+                <div>
+                    <button class="btn-admin-primary" onclick="openProductModal()">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Nouveau Plat</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 ONGLET 0: GESTION DES COMMANDES CLIENTS (SQLITE LIVE)
+                 ========================================== -->
+            <section id="orders-tab" class="admin-tab-content">
+                <div class="admin-card-container">
+                    <div class="admin-card-header">
+                        <div>
+                            <h2>📦 Gestion des Commandes en Temps Réel</h2>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Enregistrées automatiquement dans la base de données <strong>SQLite</strong> dès la validation client.</p>
+                        </div>
+                        <div class="admin-filter-row">
+                            <button class="btn-admin-primary" onclick="loadOrdersData()" style="background: rgba(46, 196, 182, 0.2); color: #2ec4b6; border: 1px solid #2ec4b6;">
+                                <i class="fa-solid fa-arrows-rotate"></i> Actualiser
+                            </button>
+                            <select id="admin-orders-filter" class="admin-select" onchange="renderOrdersList()">
+                                <option value="all">Toutes les commandes</option>
+                                <option value="Nouvelle">🟡 Nouvelles commandes</option>
+                                <option value="En préparation">🔵 En préparation cuisine</option>
+                                <option value="En livraison">🟣 En cours de livraison</option>
+                                <option value="Livrée">🟢 Livrées / Terminées</option>
+                                <option value="Annulée">🔴 Annulées</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="orders-grid-container" class="orders-cards-container">
+                        <!-- Rempli en JS depuis l'API SQLite -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 ONGLET 1: TABLEAU DE BORD (STATS)
+                 ========================================== -->
+            <section id="dashboard-tab" class="admin-tab-content" style="display: none;">
+                <!-- Stats Cards -->
+                <div class="admin-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3 id="stat-total-products">0</h3>
+                            <p>Plats au Menu</p>
+                        </div>
+                        <div class="stat-icon red"><i class="fa-solid fa-utensils"></i></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3 id="stat-active-promos">0</h3>
+                            <p>Packs Promo Actifs</p>
+                        </div>
+                        <div class="stat-icon gold"><i class="fa-solid fa-fire"></i></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3 id="stat-categories-count">12</h3>
+                            <p>Catégories</p>
+                        </div>
+                        <div class="stat-icon green"><i class="fa-solid fa-layer-group"></i></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>7j/7</h3>
+                            <p>WhatsApp Live</p>
+                        </div>
+                        <div class="stat-icon purple"><i class="fa-brands fa-whatsapp"></i></div>
+                    </div>
+                </div>
+
+                <!-- Quick Promo Packs Overview -->
+                <div class="admin-card-container">
+                    <div class="admin-card-header">
+                        <h2>🔥 Offres & Packs Promo en Cours</h2>
+                        <button class="btn-admin-primary" onclick="openPromoModal()" style="background: rgba(244, 162, 97, 0.2); color: var(--gold-accent); border: 1px solid var(--border-gold);">
+                            <i class="fa-solid fa-plus"></i> Créer un Pack Promo
+                        </button>
+                    </div>
+                    <div class="promo-packs-admin-grid" id="dashboard-promos-preview">
+                        <!-- Rempli en JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 ONGLET 2: GESTION DES CATÉGORIES (CRUD)
+                 ========================================== -->
+            <section id="categories-tab" class="admin-tab-content" style="display: none;">
+                <div class="admin-card-container">
+                    <div class="admin-card-header">
+                        <div>
+                            <h2>📂 Gestion des Catégories du Menu</h2>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Ajoutez, modifiez ou réorganisez les catégories affichées sur le site client et le menu PDF.</p>
+                        </div>
+                        <button class="btn-admin-primary" onclick="openCategoryModal()">
+                            <i class="fa-solid fa-plus"></i> Nouvelle Catégorie
+                        </button>
+                    </div>
+
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Ordre</th>
+                                    <th>Icône</th>
+                                    <th>Nom de la Catégorie</th>
+                                    <th>Code / Identifiant</th>
+                                    <th>Plats Associés</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-categories-table-body">
+                                <!-- Rempli en JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 ONGLET 3: GESTION DES PRODUITS (CRUD)
+                 ========================================== -->
+            <section id="products-tab" class="admin-tab-content" style="display: none;">
+                <div class="admin-card-container">
+                    <div class="admin-card-header">
+                        <div class="admin-filter-row">
+                            <input type="text" id="admin-products-search" class="admin-search-input" placeholder="Rechercher par nom, ingrédient...">
+                            <select id="admin-category-filter" class="admin-select">
+                                <option value="all">Toutes les catégories</option>
+                                <!-- Généré en JS -->
+                            </select>
+                        </div>
+                        <button class="btn-admin-primary" onclick="openProductModal()">
+                            <i class="fa-solid fa-plus"></i> Ajouter un Plat
+                        </button>
+                    </div>
+
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Plat / Photo</th>
+                                    <th>Catégorie</th>
+                                    <th>Format / Pièces</th>
+                                    <th>Prix (DH)</th>
+                                    <th>Tags</th>
+                                    <th>En Stock</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-products-table-body">
+                                <!-- Rempli en JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 ONGLET 4: GESTION DES PACKS PROMO PÉRIODIQUES
+                 ========================================== -->
+            <section id="promos-tab" class="admin-tab-content" style="display: none;">
+                <div class="admin-card-container">
+                    <div class="admin-card-header">
+                        <div>
+                            <h2>Packs & Offres Promotionnelles Périodiques</h2>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Définissez des réductions temporaires (Ramadan, Weekend, Offres Flash) visibles immédiatement par les clients.</p>
+                        </div>
+                        <button class="btn-admin-primary" onclick="openPromoModal()">
+                            <i class="fa-solid fa-plus"></i> Nouveau Pack Promo
+                        </button>
+                    </div>
+
+                    <div class="promo-packs-admin-grid" id="admin-promos-full-list">
+                        <!-- Rempli en JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 ONGLET 5: GESTION DES UTILISATEURS & DROITS (RBAC)
+                 ========================================== -->
+            <section id="users-tab" class="admin-tab-content" style="display: none;">
+                <div class="admin-card-container">
+                    <div class="admin-card-header">
+                        <div>
+                            <h2>👥 Gestion des Utilisateurs & Droits d'Accès</h2>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Contrôlez les accès par rôle : <strong>Super Admin</strong> (accès total), <strong>Gérant</strong> (carte & promos), <strong>Cuisine</strong> (commandes uniquement).</p>
+                        </div>
+                        <button class="btn-admin-primary" onclick="openUserModal()">
+                            <i class="fa-solid fa-user-plus"></i> Nouvel Utilisateur
+                        </button>
+                    </div>
+
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Nom Complet</th>
+                                    <th>Identifiant (Login)</th>
+                                    <th>Rôle & Droits</th>
+                                    <th>Date de Création</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-users-table-body">
+                                <!-- Rempli en JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 ONGLET 6: PARAMÈTRES & SAUVEGARDE
+                 ========================================== -->
+            <section id="settings-tab" class="admin-tab-content" style="display: none;">
+                <div class="admin-card-container">
+                    <h2 style="margin-bottom: 1.5rem;">Sécurité & Code d'Accès</h2>
+                    <form id="change-pin-form" style="max-width: 400px;">
+                        <div class="auth-input-group">
+                            <label style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">Nouveau mot de passe admin :</label>
+                            <input type="password" id="new-admin-pin" class="auth-input" placeholder="Nouveau mot de passe" required style="padding-left: 1rem;">
+                        </div>
+                        <button type="submit" class="btn-admin-primary">
+                            <i class="fa-solid fa-check"></i> Mettre à jour le mot de passe
+                        </button>
+                    </form>
+                </div>
+
+                <div class="admin-card-container">
+                    <h2 style="margin-bottom: 1rem;">Sauvegarde & Restauration des Données</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1.5rem;">
+                        Exportez la base de données complète de vos 150+ plats et packs promo au format JSON ou réinitialisez la carte par défaut.
+                    </p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn-admin-primary" onclick="exportDataBackup()" style="background: #2ec4b6;">
+                            <i class="fa-solid fa-download"></i> Exporter Sauvegarde JSON
+                        </button>
+                        <button class="btn-admin-primary" onclick="resetToDefaultMenu()" style="background: rgba(230, 57, 70, 0.2); color: #ff6b6b; border: 1px solid var(--crimson-primary);">
+                            <i class="fa-solid fa-rotate-left"></i> Réinitialiser au Menu d'Origine (16 pages)
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ==========================================
+         MODAL : AJOUTER / MODIFIER UN PRODUIT
+         ========================================== -->
+    <div class="dish-modal-overlay" id="product-modal-overlay"></div>
+    <div class="dish-modal" id="product-form-modal" style="max-width: 680px;">
+        <button class="btn-close-modal" onclick="closeProductModal()" title="Fermer"><i class="fa-solid fa-xmark"></i></button>
+        <div style="padding: 2.2rem; max-height: 85vh; overflow-y: auto;">
+            <h2 id="product-modal-heading" style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 1.5rem;">Ajouter un Nouveau Plat</h2>
+            
+            <form id="product-crud-form">
+                <input type="hidden" id="crud-product-id">
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Nom du plat *</label>
+                        <input type="text" id="crud-product-name" class="cart-input" required placeholder="Ex: Roll Imperial Truffe">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Prix (DH) *</label>
+                        <input type="number" id="crud-product-price" class="cart-input" required min="1" step="1" placeholder="Ex: 65">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Catégorie *</label>
+                        <select id="crud-product-category" class="cart-input" required>
+                            <!-- Rempli en JS -->
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Sous-Catégorie / Titre</label>
+                        <input type="text" id="crud-product-subcategory" class="cart-input" placeholder="Ex: Casa Rolls">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Nombre de pièces</label>
+                        <input type="text" id="crud-product-pieces" class="cart-input" placeholder="Ex: 4 pièces, 6 pièces, 1 bol...">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Tags / Badges (séparés par virgule)</label>
+                        <input type="text" id="crud-product-tags" class="cart-input" placeholder="Ex: Signature, Spicy, Cheese">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Description</label>
+                    <textarea id="crud-product-desc" class="cart-input" rows="2" placeholder="Description appétissante du plat..."></textarea>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Ingrédients (séparés par virgules)</label>
+                    <input type="text" id="crud-product-ingredients" class="cart-input" placeholder="Ex: Saumon frais, Avocat, Cream cheese, Tobiko">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Photo du Plat (Téléverser un fichier ou URL)</label>
+                    
+                    <!-- Zone de téléversement fichier -->
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 0.8rem;">
+                        <label class="btn-admin-primary" style="background: rgba(46, 196, 182, 0.2); color: #2ec4b6; border: 1px dashed #2ec4b6; cursor: pointer; padding: 0.6rem 1.2rem;">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Téléverser depuis l'ordinateur</span>
+                            <input type="file" id="crud-product-file-input" accept="image/*" style="display: none;" onchange="handleImageFileUpload(event, 'crud-product-image', 'crud-product-preview-img')">
+                        </label>
+                        <button type="button" class="btn-table-action" id="btn-download-product-img" onclick="downloadCurrentImage('crud-product-image')" title="Télécharger la photo actuelle" style="width: 38px; height: 38px;">
+                            <i class="fa-solid fa-download"></i>
+                        </button>
+                    </div>
+
+                    <!-- Prévisualisation Image -->
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <img id="crud-product-preview-img" src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=200&q=80" style="width: 70px; height: 70px; border-radius: 10px; object-fit: cover; border: 1px solid var(--border-subtle);">
+                        <input type="text" id="crud-product-image" class="cart-input" placeholder="https://... ou /uploads/..." style="flex: 1;" oninput="document.getElementById('crud-product-preview-img').src = this.value">
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                    <button type="button" class="btn-secondary-hero" onclick="closeProductModal()">Annuler</button>
+                    <button type="submit" class="btn-admin-primary"><i class="fa-solid fa-floppy-disk"></i> Enregistrer le Plat</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL : CRÉER UN PACK PROMOTIONNEL
+         ========================================== -->
+    <div class="dish-modal-overlay" id="promo-modal-overlay"></div>
+    <div class="dish-modal" id="promo-form-modal" style="max-width: 680px;">
+        <button class="btn-close-modal" onclick="closePromoModal()" title="Fermer"><i class="fa-solid fa-xmark"></i></button>
+        <div style="padding: 2.2rem; max-height: 85vh; overflow-y: auto;">
+            <h2 id="promo-modal-heading" style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 1.5rem;">Créer un Pack Promotionnel</h2>
+            
+            <form id="promo-crud-form">
+                <input type="hidden" id="crud-promo-id">
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Titre du Pack Promo *</label>
+                    <input type="text" id="crud-promo-title" class="cart-input" required placeholder="Ex: Pack Duo Festin Weekend (36 pcs)">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Prix Normal (DH) *</label>
+                        <input type="number" id="crud-promo-old-price" class="cart-input" required placeholder="Ex: 260">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Prix Promo (DH) *</label>
+                        <input type="number" id="crud-promo-new-price" class="cart-input" required placeholder="Ex: 199">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Badge Promo</label>
+                        <input type="text" id="crud-promo-badge" class="cart-input" placeholder="Ex: -25% PROMO, FLASH">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Date de Début</label>
+                        <input type="date" id="crud-promo-start-date" class="cart-input">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Date de Fin (Expiration)</label>
+                        <input type="date" id="crud-promo-end-date" class="cart-input">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Description & Composition détaillée du pack *</label>
+                    <textarea id="crud-promo-desc" class="cart-input" rows="3" required placeholder="Ex: 8pcs Dragon Eye + 8pcs California Saumon + 8pcs Crunchy Crevette + 2 Nems + 2 Boissons offertes"></textarea>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Photo d'illustration du Pack Promo</label>
+                    
+                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 0.8rem;">
+                        <label class="btn-admin-primary" style="background: rgba(46, 196, 182, 0.2); color: #2ec4b6; border: 1px dashed #2ec4b6; cursor: pointer; padding: 0.6rem 1.2rem;">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Téléverser depuis l'ordinateur</span>
+                            <input type="file" id="crud-promo-file-input" accept="image/*" style="display: none;" onchange="handleImageFileUpload(event, 'crud-promo-image', 'crud-promo-preview-img')">
+                        </label>
+                        <button type="button" class="btn-table-action" onclick="downloadCurrentImage('crud-promo-image')" title="Télécharger la photo actuelle" style="width: 38px; height: 38px;">
+                            <i class="fa-solid fa-download"></i>
+                        </button>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <img id="crud-promo-preview-img" src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=200&q=80" style="width: 70px; height: 70px; border-radius: 10px; object-fit: cover; border: 1px solid var(--border-subtle);">
+                        <input type="text" id="crud-promo-image" class="cart-input" placeholder="https://... ou /uploads/..." style="flex: 1;" oninput="document.getElementById('crud-promo-preview-img').src = this.value">
+                    </div>
+                </div>
+
+    <!-- ==========================================
+         MODAL : AJOUTER / MODIFIER UNE CATÉGORIE
+         ========================================== -->
+    <div class="dish-modal-overlay" id="category-modal-overlay"></div>
+    <div class="dish-modal" id="category-form-modal" style="max-width: 550px;">
+        <button class="btn-close-modal" onclick="closeCategoryModal()" title="Fermer"><i class="fa-solid fa-xmark"></i></button>
+        <div style="padding: 2.2rem; max-height: 85vh; overflow-y: auto;">
+            <h2 id="category-modal-heading" style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 1.5rem;">Ajouter une Catégorie</h2>
+            
+            <form id="category-crud-form">
+                <input type="hidden" id="crud-category-is-edit" value="0">
+                
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Nom de la Catégorie *</label>
+                    <input type="text" id="crud-category-name" class="cart-input" required placeholder="Ex: Poké Bowls & Chirashi">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Code / Slug ID *</label>
+                        <input type="text" id="crud-category-id" class="cart-input" required placeholder="Ex: poke_bowls">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Ordre d'affichage</label>
+                        <input type="number" id="crud-category-order" class="cart-input" value="10" min="1" step="1">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.2rem;">
+                    <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Icône FontAwesome</label>
+                    <div style="display: flex; gap: 0.8rem; align-items: center;">
+                        <input type="text" id="crud-category-icon" class="cart-input" placeholder="fa-bowl-food, fa-fish, fa-fire..." value="fa-utensils" oninput="updateCatIconPreview(this.value)">
+                        <div id="crud-category-icon-preview" style="width: 44px; height: 44px; border-radius: 10px; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--gold-accent);">
+                            <i class="fa-solid fa-utensils"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
+                    <input type="checkbox" id="crud-category-active" checked style="width: 18px; height: 18px; accent-color: var(--crimson-primary);">
+                    <label for="crud-category-active" style="font-size: 0.88rem; font-weight: 600; cursor: pointer;">Catégorie active (visible sur le site & le menu PDF)</label>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                    <button type="button" class="btn-secondary-hero" onclick="closeCategoryModal()">Annuler</button>
+                    <button type="submit" class="btn-admin-primary"><i class="fa-solid fa-floppy-disk"></i> Enregistrer la Catégorie</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL : AJOUTER / MODIFIER UN UTILISATEUR
+         ========================================== -->
+    <div class="dish-modal-overlay" id="user-modal-overlay"></div>
+    <div class="dish-modal" id="user-form-modal" style="max-width: 550px;">
+        <button class="btn-close-modal" onclick="closeUserModal()" title="Fermer"><i class="fa-solid fa-xmark"></i></button>
+        <div style="padding: 2.2rem; max-height: 85vh; overflow-y: auto;">
+            <h2 id="user-modal-heading" style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 1.5rem;">Ajouter un Utilisateur</h2>
+            
+            <form id="user-crud-form">
+                <input type="hidden" id="crud-user-id">
+
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Nom Complet *</label>
+                    <input type="text" id="crud-user-fullname" class="cart-input" required placeholder="Ex: Chef Ahmed Tazi">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Identifiant (Login) *</label>
+                        <input type="text" id="crud-user-username" class="cart-input" required placeholder="Ex: ahmed.tazi">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;">Rôle & Droits *</label>
+                        <select id="crud-user-role" class="cart-input" required>
+                            <option value="admin">👑 Super Administrateur (Tous les droits)</option>
+                            <option value="manager">👔 Gérant (Menu, Catégories, Promos, Commandes)</option>
+                            <option value="cuisinier">👨‍🍳 Cuisine & Commandes (Commandes uniquement)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.3rem;" id="crud-user-password-label">Mot de passe *</label>
+                    <input type="password" id="crud-user-password" class="cart-input" placeholder="Mot de passe sécurisé (min 4 caractères)">
+                    <small style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-top: 0.3rem;">(Laissez vide pour conserver le mot de passe actuel lors d'une modification)</small>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                    <button type="button" class="btn-secondary-hero" onclick="closeUserModal()">Annuler</button>
+                    <button type="submit" class="btn-admin-primary"><i class="fa-solid fa-user-check"></i> Enregistrer l'Utilisateur</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL : TICKET DE CUISINE / BON DE COMMANDE
+         ========================================== -->
+    <div class="dish-modal-overlay" id="ticket-modal-overlay"></div>
+    <div class="dish-modal" id="ticket-modal" style="max-width: 480px; background: #fff; color: #111;">
+        <button class="btn-close-modal" onclick="closeTicketModal()" style="color: #111;"><i class="fa-solid fa-xmark"></i></button>
+        <div id="kitchen-ticket-printable" style="padding: 2rem; font-family: 'Courier New', Courier, monospace;">
+            <!-- Contenu du ticket généré en JS -->
+        </div>
+        <div style="padding: 1rem 2rem; background: #f5f5f5; display: flex; justify-content: flex-end; gap: 1rem; border-top: 1px dashed #ccc;">
+            <button class="btn-secondary-hero" onclick="closeTicketModal()" style="background: #e0e0e0; color: #333;">Fermer</button>
+            <button class="btn-admin-primary" onclick="window.print()" style="background: #111; color: #fff;">
+                <i class="fa-solid fa-print"></i> Imprimer le Ticket
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

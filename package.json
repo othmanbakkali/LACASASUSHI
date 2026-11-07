@@ -1,0 +1,11 @@
+{
+  "name": "casa-sushi-app",
+  "version": "2.0.0",
+  "description": "Application Web Moderne, Gestion de Commandes et Base de Données SQLite pour Casa Sushi Tanger",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --experimental-sqlite server.js"
+  },
+  "author": "Casa Sushi",
+  "license": "ISC"
+}
