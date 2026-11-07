@@ -371,7 +371,7 @@ function printKitchenTicket(orderId) {
         container.innerHTML = `
             <div style="text-align: center; border-bottom: 2px dashed #000; padding-bottom: 1rem; margin-bottom: 1rem;">
                 <h2 style="font-size: 1.4rem; margin-bottom: 0.2rem; font-weight: 900;">CASA SUSHI</h2>
-                <p style="font-size: 0.85rem; margin: 0;">Tanger, Maroc • 06 01 86 09 39</p>
+                <p style="font-size: 0.85rem; margin: 0;">Tanger, Maroc • +212 630-553822</p>
                 <p style="font-size: 1.1rem; font-weight: 900; margin-top: 0.5rem;">COMMANDE : ${order.order_number}</p>
                 <p style="font-size: 0.8rem; margin: 0;">Date : ${new Date(order.created_at || Date.now()).toLocaleString('fr-FR')}</p>
             </div>

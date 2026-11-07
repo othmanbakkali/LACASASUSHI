@@ -101,7 +101,7 @@ def add_page_decorations(canvas, doc):
     # Pied de page
     canvas.setFont('Helvetica', 8)
     canvas.setFillColor(colors.HexColor('#666666'))
-    footer_text = "🍣 Casa Sushi Tanger • Bd Mohammed V • WhatsApp: 06 01 86 09 39 • 100% Halal & Poissons Frais"
+    footer_text = "🍣 Casa Sushi Tanger • Bd Mohammed V • WhatsApp: +212 630-553822 • 100% Halal & Poissons Frais"
     canvas.drawString(28, 16, footer_text)
     
     page_num = canvas.getPageNumber()
@@ -222,7 +222,7 @@ class PdfController:
         story.append(Paragraph("HAUTE GASTRONOMIE JAPONAISE & CRÉATIONS FRAÎCHES", subtitle_style))
         story.append(Spacer(1, 6))
 
-        info_text = "📍 Bd Mohammed V, Tanger &nbsp;&nbsp;|&nbsp;&nbsp; 📱 WhatsApp : 06 01 86 09 39 &nbsp;&nbsp;|&nbsp;&nbsp; ⏱️ Ouvert 7j/7 &nbsp;&nbsp;|&nbsp;&nbsp; ✨ 100% Halal"
+        info_text = "📍 Bd Mohammed V, Tanger &nbsp;&nbsp;|&nbsp;&nbsp; 📱 WhatsApp : +212 630-553822 &nbsp;&nbsp;|&nbsp;&nbsp; ⏱️ Ouvert 7j/7 &nbsp;&nbsp;|&nbsp;&nbsp; ✨ 100% Halal"
         info_table = Table([[Paragraph(info_text, info_box_style)]], colWidths=[printable_width])
         info_table.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, -1), c_light_bg),

@@ -2653,9 +2653,9 @@ let favorites = JSON.parse(localStorage.getItem('casa_sushi_favs') || '[]');
 const RESTAURANT_INFO = {
     name: 'Casa Sushi',
     tagline: 'Art & Passion du Sushi Japonais d\'Exception',
-    phone: '+212601860939',
-    displayPhone: '06 01 86 09 39',
-    whatsappNumber: '212601860939',
+    phone: '+212630553822',
+    displayPhone: '+212 630-553822',
+    whatsappNumber: '212630553822',
     instagram: 'https://www.instagram.com/casa.sushi_tanger?igsi=MXAwdG1ndmNxbjJ0cw==',
     instagramHandle: '@casa.sushi_tanger',
     facebook: 'https://www.facebook.com/lacasasushi1',
