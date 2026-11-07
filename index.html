@@ -7,6 +7,9 @@
     <meta name="description" content="Découvrez le menu complet de Casa Sushi : Makis, Californias, Rolls d'Exception, Sashimi, Teppanyaki, Bentos et Grands Plateaux. Commandez en ligne via WhatsApp ou téléchargez la carte en PDF.">
     <meta name="keywords" content="sushi, casa sushi, menu sushi, sashimi, bentos, yakitori, livraison sushi, commande whatsapp">
     <meta name="theme-color" content="#0c0d12">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    <link rel="manifest" href="manifest.json">
     
     <!-- Open Graph Meta -->
     <meta property="og:title" content="Casa Sushi - Menu Gastronomique Japonais">
@@ -227,34 +230,39 @@
     </section>
 
     <!-- ==========================================
-         SEARCH & CATEGORIES BAR (STICKY)
+         SEARCH & CATEGORIES BAR (STICKY COMPACT)
          ========================================== -->
     <section class="controls-section" id="menu-explorer">
         <div class="controls-container">
-            <!-- Search Row -->
+            <!-- Ligne 1 : Recherche + Tags Diététiques + Compteur -->
             <div class="search-row">
                 <div class="search-box-wrapper">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher un sushi, un plat, saumon, avocat, bento, teppanyaki...">
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher un plat, saumon, bento, teppanyaki...">
                     <button class="clear-search-btn" id="clear-search-btn" title="Effacer"><i class="fa-solid fa-xmark"></i></button>
                 </div>
+
+                <!-- Quick Dietary Tags (Inline sur la même ligne) -->
+                <div class="quick-tags-bar">
+                    <div class="quick-tags-list" id="quick-tags-list">
+                        <!-- Généré dynamiquement en JS -->
+                    </div>
+                </div>
+
                 <div class="results-counter" id="results-count">
-                    Chargement des plats...
+                    Chargement...
                 </div>
             </div>
 
-            <!-- Categories Tabs -->
-            <nav class="category-nav-bar" aria-label="Catégories du menu">
-                <div class="category-nav-list" id="category-nav-list">
-                    <!-- Généré dynamiquement en JS -->
-                </div>
-            </nav>
-
-            <!-- Quick Dietary Tags -->
-            <div class="quick-tags-bar">
-                <div class="quick-tags-list" id="quick-tags-list">
-                    <!-- Généré dynamiquement en JS -->
-                </div>
+            <!-- Ligne 2 : Catégories en 1 seule ligne fluide avec flèches de navigation -->
+            <div class="category-nav-wrapper">
+                <button class="btn-cat-nav btn-cat-prev" id="btn-cat-prev" aria-label="Catégories précédentes" title="Précédent"><i class="fa-solid fa-chevron-left"></i></button>
+                <nav class="category-nav-bar" id="category-nav-bar" aria-label="Catégories du menu">
+                    <div class="category-nav-list" id="category-nav-list">
+                        <!-- Généré dynamiquement en JS -->
+                    </div>
+                </nav>
+                <button class="btn-cat-nav btn-cat-next" id="btn-cat-next" aria-label="Catégories suivantes" title="Suivant"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
         </div>
     </section>

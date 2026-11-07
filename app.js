@@ -2669,6 +2669,7 @@ const RESTAURANT_INFO = {
 document.addEventListener('DOMContentLoaded', () => {
     loadDynamicMenuData();
     initCategoryTabs();
+    initCategoryNavScroll();
     initFilterTags();
     renderPromoPacksBanner();
     renderMenuItems();
@@ -2857,6 +2858,52 @@ async function initCategoryTabs() {
             renderMenuItems();
         });
     });
+
+    initCategoryNavScroll();
+}
+
+// Navigation fluide et défilement molette pour les catégories
+function initCategoryNavScroll() {
+    const navBar = document.getElementById('category-nav-bar');
+    const prevBtn = document.getElementById('btn-cat-prev');
+    const nextBtn = document.getElementById('btn-cat-next');
+
+    if (!navBar) return;
+
+    if (prevBtn && !prevBtn.dataset.bound) {
+        prevBtn.dataset.bound = 'true';
+        prevBtn.addEventListener('click', () => {
+            navBar.scrollBy({ left: -260, behavior: 'smooth' });
+        });
+    }
+
+    if (nextBtn && !nextBtn.dataset.bound) {
+        nextBtn.dataset.bound = 'true';
+        nextBtn.addEventListener('click', () => {
+            navBar.scrollBy({ left: 260, behavior: 'smooth' });
+        });
+    }
+
+    if (!navBar.dataset.wheelBound) {
+        navBar.dataset.wheelBound = 'true';
+        navBar.addEventListener('wheel', (e) => {
+            if (e.deltaY !== 0) {
+                e.preventDefault();
+                navBar.scrollLeft += e.deltaY;
+            }
+        }, { passive: false });
+    }
+
+    const tagsBar = document.querySelector('.quick-tags-bar');
+    if (tagsBar && !tagsBar.dataset.wheelBound) {
+        tagsBar.dataset.wheelBound = 'true';
+        tagsBar.addEventListener('wheel', (e) => {
+            if (e.deltaY !== 0) {
+                e.preventDefault();
+                tagsBar.scrollLeft += e.deltaY;
+            }
+        }, { passive: false });
+    }
 }
 
 // 2. Filtres par Tags (Spicy, Veggie, Cheese, Signature...)
