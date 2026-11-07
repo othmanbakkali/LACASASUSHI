@@ -2716,46 +2716,83 @@ img {
         justify-content: center;
     }
 
-    /* Barre Sticky Recherche & Catégories (Navigation horizontale fluide) */
+    /* Barre Sticky Recherche & Catégories (Navigation mobile compacte et fluide) */
     .controls-section {
         position: sticky;
-        top: 56px;
-        padding: 0.55rem 0.9rem 0.45rem;
+        top: 52px;
+        padding: 0.45rem 0.85rem 0.35rem;
         z-index: 850;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        background: rgba(12, 13, 18, 0.96);
+        background: rgba(12, 13, 18, 0.97);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
 
-    .search-row {
+    .controls-container {
+        display: flex;
         flex-direction: column;
-        align-items: stretch;
         gap: 0.35rem;
     }
 
+    /* Réorganisation verticale : 1. Recherche, 2. Catégories, 3. Tags diététiques, 4. Compteur */
+    .search-row {
+        display: contents;
+    }
+
+    /* 1. Champ de Recherche Mobile */
     .search-box-wrapper {
-        max-width: 100%;
-        width: 100%;
+        order: 1;
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        position: relative !important;
+        margin: 0;
     }
 
     .search-input {
-        font-size: 16px; /* Empêche l'auto-zoom sur iPhone */
-        height: 42px;
-        padding: 0.6rem 2.4rem 0.6rem 2.5rem;
-        border-radius: var(--radius-sm);
+        width: 100%;
+        height: 36px;
+        font-size: 15px; /* Empêche le zoom indésirable sur iOS tout en restant lisible */
+        padding: 0 2rem 0 2.2rem;
+        border-radius: var(--radius-full);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: #ffffff;
     }
 
-    .results-counter {
-        font-size: 0.76rem;
-        text-align: left;
-        padding: 0 0.2rem;
+    .search-input:focus {
+        border-color: var(--crimson-primary);
+        background: rgba(255, 255, 255, 0.09);
     }
 
-    /* Défilement horizontal fluide des catégories (UberEats / Deliveroo style) */
+    .search-box-wrapper i.search-icon {
+        position: absolute;
+        left: 0.8rem;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        pointer-events: none;
+    }
+
+    .clear-search-btn {
+        position: absolute;
+        right: 0.65rem;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        font-size: 0.8rem;
+        width: 20px;
+        height: 20px;
+    }
+
+    /* 2. Catégories Principales en Swipe Horizontal Fluide */
     .category-nav-wrapper {
+        order: 2;
         width: 100%;
         gap: 0;
+        margin: 0;
     }
 
     .btn-cat-nav {
@@ -2767,10 +2804,10 @@ img {
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
-        padding: 0.25rem 0;
-        margin: 0 -0.9rem;
-        padding-left: 0.9rem;
-        padding-right: 0.9rem;
+        padding: 0.1rem 0;
+        margin: 0 -0.85rem;
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
     }
 
     .category-nav-bar::-webkit-scrollbar {
@@ -2781,28 +2818,39 @@ img {
         display: flex;
         flex-wrap: nowrap;
         justify-content: flex-start;
-        gap: 0.45rem;
+        align-items: center;
+        gap: 0.4rem;
         width: max-content;
     }
 
     .cat-tab-btn {
         flex-shrink: 0;
         white-space: nowrap;
-        padding: 0.42rem 0.8rem;
-        font-size: 0.8rem;
+        padding: 0.32rem 0.75rem;
+        font-size: 0.76rem;
         border-radius: var(--radius-full);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
     }
 
-    /* Défilement horizontal des tags filtres */
+    .cat-tab-btn i {
+        font-size: 0.76rem;
+    }
+
+    /* 3. Tags Diététiques en Micro-Pills Déroulantes */
     .quick-tags-bar {
+        order: 3;
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
-        padding: 0.15rem 0 0.25rem;
-        margin: 0 -0.9rem;
-        padding-left: 0.9rem;
-        padding-right: 0.9rem;
+        padding: 0.05rem 0 0.15rem;
+        margin: 0 -0.85rem;
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
+        display: flex;
+        align-items: center;
     }
 
     .quick-tags-bar::-webkit-scrollbar {
@@ -2813,15 +2861,28 @@ img {
         display: flex;
         flex-wrap: nowrap;
         justify-content: flex-start;
-        gap: 0.35rem;
+        align-items: center;
+        gap: 0.3rem;
         width: max-content;
     }
 
     .tag-pill-btn {
         flex-shrink: 0;
         white-space: nowrap;
-        padding: 0.28rem 0.65rem;
-        font-size: 0.75rem;
+        padding: 0.2rem 0.55rem;
+        font-size: 0.7rem;
+        border-radius: var(--radius-full);
+    }
+
+    /* 4. Compteur de Plats Discret */
+    .results-counter {
+        order: 4;
+        font-size: 0.72rem;
+        color: var(--gold-accent);
+        font-weight: 600;
+        text-align: left;
+        padding: 0 0.15rem;
+        margin-top: -0.1rem;
     }
 
     /* Grille des Plats */
